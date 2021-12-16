@@ -1,0 +1,7 @@
+.env
+__pycache__
+fast_prototype.ipynb
+FASTAPI/
+fastapi_log.ldf
+fastapi.mdf
+items_table.txt
