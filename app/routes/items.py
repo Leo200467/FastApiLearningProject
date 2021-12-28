@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import APIRouter, HTTPException, Response, status, Depends
 from sqlalchemy.orm.session import Session
 from app import models
@@ -22,18 +20,23 @@ def test_sqlachemy(db: Session = Depends(get_db)):
 def get_all_items(
     db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user), limit: int = 10):
 
-    cursor = conn.cursor()
+    # cursor = conn.cursor()
+    
     if limit:
-        cursor.execute(
-            f"""
-            SELECT * 
-            FROM public.items
-            LIMIT {limit}
-            """)
-        all_items = cursor.fetchall()
-        cursor.close()
+        # cursor.execute(
+        #     f"""
+        #     SELECT * 
+        #     FROM public.items
+        #     LIMIT {limit}
+        #     """)
+        # all_items = cursor.fetchall()
+        # cursor.close()
 
-        return all_items
+        # return all_items
+
+        some_items = db.query(models.Items).limit(limit)
+
+        return some_items
     else:
         all_items = db.query(models.Items).all()
 
