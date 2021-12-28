@@ -6,6 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from psycopg2.extras import RealDictCursor
 
 from .config import settings
+from . import models
+from .database import engine, SessionLocal, get_db
+
+models.Base.metadata.create_all(bind=engine)
 
 def connect_database():
     while True:
