@@ -4,7 +4,8 @@ class SysSettings(BaseSettings):
     database_host: str
     database_name: str
     database_user: str
-    database_pwd: str 
+    database_pwd: str
+    database_port: str 
     jwt_secret_key: str
     jwt_algorithm: str
     access_token_expiration: int
