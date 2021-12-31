@@ -1,5 +1,4 @@
 from fastapi.param_functions import Depends
-import psycopg2
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.orm.session import Session
 from app import models
