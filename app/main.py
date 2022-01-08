@@ -6,16 +6,16 @@ from .database import engine
 
 from .routes import auth, items, users
 
-#INSTANCIATING DATABASE
+# INSTANCIATING DATABASE
 app = FastAPI()
 
-#INITIALIZING DATABASE
+# INITIALIZING DATABASE
 models.Base.metadata.create_all(bind=engine)
 
-#SET ORIGINS RELATED TO DOMAIN
-origins = []
+# SET ORIGINS RELATED TO DOMAIN
+origins = ["*"]
 
-#MIDDLEWARE SETUP
+# MIDDLEWARE SETUP
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[],
@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
     )
 
-#INCLUDING ROUTES
+# INCLUDING ROUTES
 app.include_router(items.router)
 app.include_router(users.router)
 app.include_router(auth.router)

@@ -22,12 +22,11 @@ def upgrade():
     op.add_column('items', 
         sa.Column('tax', sa.Float(), nullable=False))
     op.add_column('items', 
-        sa.Column('created_at', sa.TIMESTAMP(timezone=True), nullable=False, server_default=FetchedValue()))
+        sa.Column('created_at', sa.TIMESTAMP(timezone=True), nullable=False, server_default=sa.text('now()')))
     pass
 
 
 def downgrade():
     op.drop_column('items', 'tax')
-    op.drop_column('items', 'price_with_tax')
     op.drop_column('items', 'created_at')
     pass

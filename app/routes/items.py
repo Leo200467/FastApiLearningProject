@@ -9,12 +9,12 @@ from .. import schemas, oauth2
 
 router = APIRouter(prefix="/items", tags=["Items"])
 
+
 @router.get("/")
 def get_all_items(
-        db: Session = Depends(get_db), 
+        db: Session = Depends(get_db),
         user_id: int = Depends(oauth2.get_current_user),
-        limit: Optional[int] = 10): 
-
+        limit: Optional[int] = 10):
     if limit:
         some_items = db.query(models.Items).limit(limit).all()
         return some_items
@@ -25,8 +25,8 @@ def get_all_items(
 
 @router.get("/{id}", response_model=schemas.ItemResponse)
 def get_item(
-        id: int, 
-        user_id: int = Depends(oauth2.get_current_user), 
+        id: int,
+        user_id: int = Depends(oauth2.get_current_user),
         db: Session = Depends(get_db)):
 
     item_by_id = db.query(models.Items).filter(models.Items.id == id).first()
@@ -37,10 +37,13 @@ def get_item(
     return item_by_id
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.ItemResponse)
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    response_model=schemas.ItemResponse)
 def create_item(
-        item: schemas.Item, 
-        db: Session = Depends(get_db), 
+        item: schemas.Item,
+        db: Session = Depends(get_db),
         user_id: int = Depends(oauth2.get_current_user)):
 
     new_item = models.Items(**item.dict())
@@ -56,8 +59,8 @@ def create_item(
 
 @router.delete("/{id}")
 def delete_item(
-        id: int, 
-        user_id: int = Depends(oauth2.get_current_user), 
+        id: int,
+        user_id: int = Depends(oauth2.get_current_user),
         db: Session = Depends(get_db)):
 
     deleted_item = db.query(models.Items).filter(models.Items.id == id)
@@ -88,8 +91,10 @@ def update_item(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"post with id:{id} not found")
 
-    updated_item_query.update(**item.dict(), synchronize_session=False)
+    update_data = item.dict(exclude_unset=True)
+
+    updated_item_query.update(update_data, synchronize_session=False)
 
     db.commit()
 
-    return updated_item_query_result
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

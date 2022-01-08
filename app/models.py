@@ -1,8 +1,9 @@
-from sqlalchemy import Column, Float, Integer, String
+from sqlalchemy import Column, Float, Integer, String, Computed
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 from .database import Base
+
 
 class Items(Base):
     __tablename__ = "items"
@@ -12,8 +13,12 @@ class Items(Base):
     description = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     tax = Column(Float, nullable=False)
-    price_with_tax = Column(Float, nullable=False, server_default='price + tax')
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    price_with_tax = Column(Float, Computed('price + tax'), nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()'))
+
 
 class Users(Base):
     __tablename__ = "users"
@@ -22,4 +27,7 @@ class Users(Base):
     email = Column(String, nullable=False, unique=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()'))

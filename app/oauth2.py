@@ -15,6 +15,7 @@ ALGORITHM = settings.jwt_algorithm
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expiration
 
+
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
 
@@ -24,14 +25,15 @@ def create_access_token(data: dict) -> str:
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
 
     return encoded_jwt
-    
+
+
 def verify_access_token(token: str, access_exception) -> schemas.TokenData:
 
     try:
         payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
         id: str = payload.get("user_id")
 
-        if id == None:
+        if id is None:
             raise access_exception
         token_data = schemas.TokenData(id=id)
     except JWTError:
@@ -39,10 +41,11 @@ def verify_access_token(token: str, access_exception) -> schemas.TokenData:
 
     return token_data
 
+
 def get_current_user(token: str = Depends(oauth2_scheme)):
     credential_exception = HTTPException(
                                         status_code=status.HTTP_401_UNAUTHORIZED,
-                                        detail=f"Could not validate credentials",
+                                        detail="Could not validate credentials",
                                         headers={"WWW-Authenticate": "Bearer"}
                                         )
 

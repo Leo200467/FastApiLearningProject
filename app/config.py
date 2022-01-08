@@ -1,5 +1,6 @@
 from pydantic import BaseSettings
 
+
 class SysSettings(BaseSettings):
     database_host: str
     database_name: str
